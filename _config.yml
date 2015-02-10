@@ -1,10 +1,10 @@
-name: "Gereksiz"
+name: "Smallyoung"
 markdown: redcarpet
 highlighter: pygments
 permalink: :title
-exclude: [README.md, LICENSE, Makefile]
+exclude: [README.md, LICENSE, Makefile,nohup.out]
 
 # Information for the Atom feed
 gereksiz:
-   author: "John Doe"
-   email: "john.doe@mail.sexy"
+   author: "smallyoung"
+   email: "kyleteng@outlook.com"
