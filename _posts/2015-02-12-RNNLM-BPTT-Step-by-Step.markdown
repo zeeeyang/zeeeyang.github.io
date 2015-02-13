@@ -16,13 +16,13 @@ In this blog post, We intend to lay specail emphasis on mathematical details of 
 Specifically, we will cover these questions:  
 
 +  How to unfold a recurrent network generally?  
-+  How to derivate only by chain rules?
++  How to calculate derivatives only by chain rules?
 +  How to understand backpropagation from **Error Propagation**?
 +  What is the weight updating mechanism after unfolding? And why we need to do that?  
 
 After reading this blog, I hope you can have a better understanding of RNNLM and BPTT alogrithm.  
 
-###Structure of Recurrent Neural Network Language Model   
+##Structure of Recurrent Neural Network Language Model   
 
 The network structure of RNNLM is shown in Figure 1.   
 ![Figure 1](/images/rnn_structure.png "Network Structure of Recurrent Neural Network Language Model") 
@@ -56,8 +56,8 @@ Comaring equation $\eqref{1}$ and equation $\eqref{2}$, we also can tell the dif
 
 ---
 
-###Feedforward Propagation  
-Usually, the non-linear transform function in hidden layer and output layer is **sigmoid function** $f$ and **softmax function** $g$ respectively. There are other options for $f$ and $g$, but the basic idea is same.
+##Feedforward Propagation  
+Usually, the non-linear transform function in hidden layer and output layer is **sigmoid function** $f$ and **softmax function** $g$ respectively. There are other options for $f$ and $g$, but the basic idea is the same.
 First, we look at function $f$,
 $$ f(x) = \frac{1}{1+\mathrm{e}^{-x}} $$
 And the derivation of $f(x)$ with respect to $x$ has an interesting property,
@@ -91,8 +91,8 @@ y\_k(t) = g(c\_k(t))
 \end{equation}
 
 ---
-###Backward Progagation  
-1. Cost Function  
+##Backward Progagation  
+### Cost Function  
 What's the goal of training? We want to make the network output as close as possible to the corrent output.   
 Support the correct output is $d(t)$ at time $t$. 
 There is only one component in $d(t)$ is $1$, others are $0$. 
@@ -112,7 +112,7 @@ We follow his way in this post.
 \label{10}
 \end{equation}
 
-2. $\frac{\partial{L(t)}}{\partial{w\_{kh}(t)}}$  
+### Updating $W$  
 First, we consider the parameter $W$. 
 Take one element $w\_{kh}(t)$ in $W$ for example, in order to update $w\_{kh}(t)$,  we need to caculate the partial derivative $\frac{\partial{L(t)}}{\partial{w\_{kh}(t)}}$.
 After that we can update $W$,
@@ -122,9 +122,9 @@ w\_{kh}(t+1) = w\_{kh}(t) + \alpha\*\frac{\partial{L(t)}}{\partial{w\_{kh}(t)}}-
 \end{equation}
 where $\alpha$ is the learning rate and $\beta$ is the regularization parameter.  
 $L(t)$ is a function of $w\_{kh}(t)$. However, directly calculating derivatives is difficult. 
-Here, we use a common technique so called **chain rule** to calculate derivates through the network. 
+Here, we use a common technique so called **chain rule** to calculate derivatives through the network. 
 The chain from $w\_{kh}(t)$ to $L(t)$ is shown in Figure 2.
-![Figure 1](/images/w_chain.png "Chain of W") 
+![Figure 2](/images/w_chain.png "Chain of W") 
 According to the chain, we can calculate $\frac{\partial{L(t)}}{\partial{w\_{kh}(t)}}$ by 
 \begin{equation}
   \frac{\partial{L(t)}}{\partial{w\_{kh}(t)}} = 
@@ -132,7 +132,7 @@ According to the chain, we can calculate $\frac{\partial{L(t)}}{\partial{w\_{kh}
   =(\sum\_{o=1}^{V}{\frac{\partial{L(t)}}{\partial{y\_o(t)}}\* \frac{\partial{y\_o(t)}}{\partial{c\_k(t)}}}) \* \frac{\partial{c\_{k}(t)}}{\partial{w\_{kh}(t)}}
   \label{12}
 \end{equation}
-There are three items here, $\frac{\partial{L(t)}}{\partial{y\_o(t)}}$,$\frac{\partial{y\_o(t)}}{\partial{c\_k(t)}}$,$\frac{\partial{c\_{k}(t)}}{\partial{w\_{kh}}(t)}$. We will handle them one by one.  
+There are three items here, $\frac{\partial{L(t)}}{\partial{y\_o(t)}}$,$\frac{\partial{y\_o(t)}}{\partial{c\_k(t)}}$,$\frac{\partial{c\_{k}(t)}}{\partial{w\_{kh}}(t)}$. We will handle them one by one **from backward to forward**.  
 (1) $\frac{\partial{L(t)}}{\partial{y\_o(t)}}$  
 According to equation $\eqref{10}$, 
 \begin{equation}
@@ -185,12 +185,105 @@ w\_{kh}(t+1) = w\_{kh}(t) + \alpha\*e\_k(t) * s\_h(t)-\beta\*w\_{kh}(t)
 And using the maxtrix-vector notation,  
 
 \begin{equation}
-W(t+1) = W(t) + \alpha\*e(t) * s(t)^\mathrm{T}-\beta\*W(t)
+W(t+1) = W(t) + \alpha\*E_{o}(t) * s(t)^\mathrm{T}-\beta\*W(t)
+\label{20}
+\end{equation}
+
+**$E_{o}(t)$** is a vector of $\{e\_k(t)\}$. It stands for the *errors* of the output. 
+
+
+### Updating $U$ 
+
+Similar to update $W$, we need to compute $\frac{\partial{L(t)}}{\partial{u\_{ji}(t)}}$ to change $U$. The chain of $u\_{ji}(t)$ is shown in Figure 3.
+![Figure 3](/images/u_chain.png "Chain of U") 
+
+The calculation is more complex than updating $W$. There are two sums here. But we don't need to calculate from the last step. 
+Since we already know $\frac{\partial{L(t)}}{\partial{c\_{k}(t)}}$ in equation $\eqref{16}$, 
+we can start from $\frac{\partial{c\_{k}(t)}}{\partial{s\_{j}(t)}}$ to speed our calculation.  
+\begin{equation}
+\frac{\partial{c\_{k}(t)}}{\partial{s\_{j}(t)}} = w\_{kj}(t)
+\label{21}
+\end{equation}
+
+Then we can calculate $\frac{\partial{L(t)}}{\partial{s\_{j}(t)}}$, 
+\begin{equation}
+\frac{\partial{L(t)}}{\partial{s\_{j}(t)}} = \sum\_{k=1}^{V}{
+	\frac{\partial{L(t)}}{\partial{c\_{k}(t)}} \*
+	\frac{\partial{c\_{k}(t)}}{\partial{s\_{j}(t)}}
+}
+=\sum\_{k=1}^{V}{e\_{k}(t)\*w\_{kj}(t)} = E\_{o}(t)^\mathrm{T} \* W\_j
+\label{22}
+\end{equation}
+
+$W_j$ denotes the $j$-th column vector of $W$.   
+Continue going forward and by use of equation $\eqref{3}$ and equation $\eqref{22}$, we can get
+\begin{equation}
+\frac{\partial{L(t)}}{\partial{b\_{j}(t)}} = \frac{\partial{L(t)}}{\partial{s\_{j}(t)}} \* \frac{\partial{s\_{j}(t)}}{\partial{b\_{j}(t)}}
+= E\_{o}(t)^\mathrm{T} \* W\_j \* s\_{j}(t) \* (1-s\_{j}(t))
+\label{23}
+\end{equation}
+
+And now, we can compute $\frac{\partial{L(t)}}{\partial{u\_{ji}(t)}} $,
+\begin{equation}
+\frac{\partial{L(t)}}{\partial{u\_{ji}(t)}} =\frac{\partial{L(t)}}{\partial{b\_{j}(t)}} * \frac{\partial{b\_{j}(t)}}{\partial{u\_{ji}(t)}}
+= E\_{o}(t)^\mathrm{T} \* W\_j \* s\_{j}(t) \* (1-s\_{j}(t)) \* x\_i(t)
+\label{24}
+\end{equation}
+
+Therefore, we can update $u\_{ji}(t)$ by 
+\begin{equation}
+u\_{ji}(t+1) = u\_{ji}(t) + \alpha \* E\_{o}(t)^\mathrm{T} \* W\_j \* s\_{j}(t) \* (1-s\_{j}(t)) \* x\_i(t) - \beta \* u\_{ji}(t)
+\label{25}
+\end{equation}
+
+However, this equation $\eqref{25}$ is too long. We want to make it like equation $\eqref{20}$ using the matrix-vector notation style.   
+
+Compare to equation $\eqref{20}$, we need to ensure $E\_{o}(t)^\mathrm{T} \* W\_j \* s\_{j}(t) \* (1-s\_{j}(t))$ to be the $j$-th element of a certain vector. 
+Suppose we call this vector as $E\_{h}(t)$ and $E\_{hj}(t)$ is the corresponding $j$-th element.   
+
+And we define $d\_{hj}(E\_{o}(t)^\mathrm{T},t)$ to refer this calculation for convenience, which clearly means $E\_{hj}(t)=d\_{hj}(E\_{o}(t)^\mathrm{T}W,t)$.
+
+\begin{equation}
+d\_{hj}(E\_{o}(t)^\mathrm{T}W,t) = E\_{o}(t)^\mathrm{T} \* W\_{j} \* f^\mathrm{\prime}(s\_{j}(t)) 
+= E\_{o}(t)^\mathrm{T} \* W\_j \* s\_{j}(t) \* (1-s\_{j}(t)) 
+\label{26}
+\end{equation}
+
+And now the target matrix $E\_{h}(t)=d\_{h}(E\_{o}(t)^\mathrm{T}W,t)$.   
+$E\_{h}(t)$ is a function of $E\_{o}(t)^\mathrm{T}W$. 
+$E\_{o}(t)$ is the error of output layer. $E\_{o}(t)^\mathrm{T}W$ is the error propagated from output layer to hidden layer. 
+Actually, $E\_{h}(t)$ is the error accumulated at the hidden layer. 
+It seems error **propagated recursively** from output layer to hidden layer under the function $d_{h}$ and the matrix $w$ between these two layers. Interesting....!!!
+
+Remember we want to obtain the maxtrix-vector form to update $U$. Using $E\_{h}(t)$, the updating rule is
+\begin{equation}
+U(t+1) = U(t) + \alpha \* E\_{h}(t) \* x(t)^\mathrm{T} - \beta \* U(t)
+\end{equation}
+### Updating $R$ 
+
+Similarly to update $U$, we can get the updating rules of $R$,
+
+\begin{equation}
+R(t+1) = R(t) + \alpha \* E\_{h}(t) \* s(t-1)^\mathrm{T} - \beta \* R(t)
 \end{equation}
 
 ---
-###Backward Progagation Through Time
-* Unfolding
-* Weight Updating Mechanism  
+##Backward Progagation Through Time
 
-###References
+* Unfolding  
+![Figure 3](/images/unfold_rnn.png "Unfolding Recurrent Neural Network") 
+
+* Weight Updating Mechanism   
+Suppose we have two variables, $M\_1$ and $M\_2$. 
+ Their initial values are the same, say it is $M\_0$. At each step, we will update $M\_1$ and $M\_2$ by their derivatives $\frac{\partial{L}}{\partial{M\_1}}$
+and $\frac{\partial{L}}{\partial{M\_2}}$ respectively.  
+And we want to make sure the value of $M\_1$ and $M\_2$ are always the same in each step. But values of $\frac{\partial{L}}{\partial{M\_1}}$ and $\frac{\partial{L}}{\partial{M\_2}}$ usually are different.  How can we achieve this goals?  
+A simple technique here is to put $\frac{\partial{L}}{\partial{M\_1}}$ and $\frac{\partial{L}}{\partial{M\_2}}$ together. And use the sum result of average result 
+to modify $M\_1$ and $M\_2$ by the same amount. 
+\begin{equation}
+M\_1^{new} =M\_1^{old} + \alpha \* (\frac{\partial{L}}{\partial{M\_1}}+\frac{\partial{L}}{\partial{M\_2}}) \\\
+M\_2^{new} =M\_2^{old} + \alpha \* (\frac{\partial{L}}{\partial{M\_1}}+\frac{\partial{L}}{\partial{M\_2}})
+\end{equation}
+Since their initial values are the same and their derivatives are the same, their values will always be the same. And this weight updating mechanism considers derivative contributions from both side. 
+
+##References
