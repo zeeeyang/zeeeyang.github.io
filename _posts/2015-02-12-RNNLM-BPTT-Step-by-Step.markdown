@@ -272,14 +272,14 @@ R(t+1) = R(t) + \alpha \* E\_{h}(t) \* s(t-1)^\mathrm{T} - \beta \* R(t)
 ---
 ##Backward Progagation Through Time
 
-* Why BPTT?
+* Why BPTT?(todo)
 
 * Unfolding  
 ![Figure 3](/images/unfold_rnn.png "Unfolding Recurrent Neural Network") 
 
-* $\frac{\partial{L(t)}}{\partial{u\_{ji}(t-1)}}$
+* Derivatives at time $t-1$, $\frac{\partial{L(t)}}{\partial{u\_{ji}(t-1)}}$
 
-$x\_i(t-1)-->u\_{ji}(t-1)-->b\_{j}(t-1)-->s\_{j}(t-1)-->\sum{b\_k(t)}$
+The chain of $u\_{ji}(t-1)$: $x\_i(t-1)-->b\_{j}(t-1)-->s\_{j}(t-1)-->\sum{b\_k(t)}$
 
 According to $\eqref{23}$, we all already know $\frac{\partial{L(t)}}{\partial{b\_{k}(t)}}$, 
 \begin{equation}
@@ -333,6 +333,8 @@ R(t+1) = R(t) + \alpha \* E\_{h}(t-1) \* s(t-2)^\mathrm{T} - \beta \* R(t)
 \label{36}
 \end{equation}
 
+* Derivatives at arbitrary time
+
 Comparing these updating rules equation $\eqref{27}$ and equation $\eqref{35}$, equation $\eqref{28}$ and equation $\eqref{36}$,  we found they are in a **consistent** form. 
 The calculation procedure has nothing special, except the value of some variables is different. 
 Similarly, at time $t-2$, considering the cost function is $L(t)$, we can get these updating rules, 
@@ -362,6 +364,7 @@ Therefore we can get the form of $E\_{h}(t-2)$,
 
 
 * Weight Updating Mechanism   
+
 There is still another question.  We already know derivative of $\frac{\partial{L(t)}}{\partial{u\_{ji}(t)}}$,
 $\frac{\partial{L(t)}}{\partial{u\_{ji}(t-1)}}$, $\frac{\partial{L(t)}}{\partial{u\_{ji}(t-2)}}$. 
 If we update them one by one, 
@@ -370,7 +373,8 @@ But we must make sure $U$ will be the same at every time in the unfolded situati
 how to update $U$?  
 
 Suppose we have two variables, $M\_1$ and $M\_2$. 
- Their initial values are the same, say it is $M\_0$. At each step, we will update $M\_1$ and $M\_2$ by their derivatives $\frac{\partial{L}}{\partial{M\_1}}$
+
+Their initial values are the same, say it is $M\_0$. At each step, we will update $M\_1$ and $M\_2$ by their derivatives $\frac{\partial{L}}{\partial{M\_1}}$
 and $\frac{\partial{L}}{\partial{M\_2}}$ respectively.  
 And we want to make sure the value of $M\_1$ and $M\_2$ are always the same in each step. But values of $\frac{\partial{L}}{\partial{M\_1}}$ and $\frac{\partial{L}}{\partial{M\_2}}$ usually are different.  How can we achieve this goals?  
 A simple technique here is to put $\frac{\partial{L}}{\partial{M\_1}}$ and $\frac{\partial{L}}{\partial{M\_2}}$ together. And use the sum result of average result 
@@ -381,13 +385,15 @@ M\_2^{new} =M\_2^{old} + \alpha \* (\frac{\partial{L}}{\partial{M\_1}}+\frac{\pa
 \end{equation}
 Since their initial values are the same and their derivatives are the same, their values will always be the same. And this weight updating mechanism considers derivative contributions from both side. 
 
-Now, we can get final updating rules of $W$, $U$, $R$, 
+We use this mechanism to update weight of $U$ and $R$. 
+
+Now, we can get final updating rules of $W$, $U$ and $R$, 
 \begin{equation}
  W(t+1) = W(t) + \alpha \* E\_{o}(t) \* s(t)^\mathrm{T} - \beta \* W(t) \\\
  U(t+1) = U(t) + \alpha \* \sum\_{m=0}^{M}{E\_{h}(t-m) \* x(t-m)^\mathrm{T}} - \beta \* U(t) \\\
  R(t+1) = R(t) + \alpha \* \sum\_{m=0}^{M}{E\_{h}(t-m) \* s(t-m-1)^\mathrm{T}} - \beta \* R(t) 
 \end{equation}
 
-where $M$ is the steps for unfolding. 
+where $M$ is number of steps for unfolding. 
 
 ##References
