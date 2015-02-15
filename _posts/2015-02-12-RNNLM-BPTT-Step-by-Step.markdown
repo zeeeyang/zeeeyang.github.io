@@ -258,6 +258,7 @@ It seems error **propagated recursively** from output layer to hidden layer unde
 Remember we want to obtain the maxtrix-vector form to update $U$. Using $E\_{h}(t)$, the updating rule is
 \begin{equation}
 U(t+1) = U(t) + \alpha \* E\_{h}(t) \* x(t)^\mathrm{T} - \beta \* U(t)
+\label{27}
 \end{equation}
 ### Updating $R$ 
 
@@ -265,15 +266,109 @@ Similarly to update $U$, we can get the updating rules of $R$,
 
 \begin{equation}
 R(t+1) = R(t) + \alpha \* E\_{h}(t) \* s(t-1)^\mathrm{T} - \beta \* R(t)
+\label{28}
 \end{equation}
 
 ---
 ##Backward Progagation Through Time
 
+* Why BPTT?
+
 * Unfolding  
 ![Figure 3](/images/unfold_rnn.png "Unfolding Recurrent Neural Network") 
 
+* $\frac{\partial{L(t)}}{\partial{u\_{ji}(t-1)}}$
+
+$x\_i(t-1)-->u\_{ji}(t-1)-->b\_{j}(t-1)-->s\_{j}(t-1)-->\sum{b\_k(t)}$
+
+According to $\eqref{23}$, we all already know $\frac{\partial{L(t)}}{\partial{b\_{k}(t)}}$, 
+\begin{equation}
+\frac{\partial{L(t)}}{\partial{b\_{k}(t)}} = E\_{hk}(t)
+\end{equation}
+
+\begin{equation}
+\frac{\partial{L(t)}}{\partial{s\_{j}(t-1)}} = \sum\_{k=1}^{H}{\frac{\partial{L(t)}}{\partial{b\_{k}(t)}} \* \frac{\partial{b\_{k}(t)}}{\partial{s\_{j}(t-1)}}}
+= \sum\_{k=1}^{H}{E\_{hk}(t)*r\_{kj}(t)} = E\_h(t)^{\mathrm{T}} * R\_j
+\end{equation}
+
+~~~very similar to equation $\eqref{22}$, $R_j$ means the $j$-th column of matrix $R$. 
+
+\begin{equation}
+\frac{\partial{L(t)}}{\partial{b\_{j}(t-1)}}  = \frac{\partial{L(t)}}{\partial{s\_{j}(t-1)}} \* \frac{
+\partial{s\_{j}(t-1)}
+}{
+\partial{b\_{j}(t-1)}
+}
+= E\_h(t)^{\mathrm{T}} * R\_j \* s\_{j}(t-1) \* (1-s\_{j}(t-1) ) 
+\end{equation}
+
+Using the function defined in $\eqref{26}$, we found
+\begin{equation}
+ E\_h(t)^{\mathrm{T}} * R\_j \* s\_{j}(t-1) \* (1-s\_{j}(t-1) ) = d\_{hj}(E\_h(t)^{\mathrm{T}}\*R, t-1)
+\end{equation}
+
+Therefore, 
+\begin{equation}
+ \frac{\partial{L(t)}}{\partial{b\_{j}(t-1)}} = d\_{hj}(E\_h(t)^{\mathrm{T}}\*R, t-1)
+\end{equation}
+
+For convenience, we define $E\_{hj}(t-1)=d\_{h,j}(E\_{h}(t)^\mathrm{T}R,t-1)$, and sequencely we know the vector $E\_{h}(t-1) = d\_{hj}(E\_{h}(t)^\mathrm{T}R,t-1)$.  
+
+Then, 
+\begin{equation}
+ \frac{\partial{L(t)}}{\partial{u\_{ji}(t-1)}} = \frac{\partial{L(t)}}{\partial{b\_{j}(t-1)}} * \frac{\partial{b\_{j}(t-1)}}{\partial{u\_{ji}(t-1)}} 
+ = d\_{hj}(E\_h(t-1)^{\mathrm{T}}\*R, t-1) * x\_{i}(t-1)
+\end{equation}
+
+Similar to equation $\eqref{27}$, we can get the target updating rule,
+
+\begin{equation}
+U(t+1) = U(t) + \alpha \* E\_{h}(t-1) \* x(t-1)^\mathrm{T} - \beta \* U(t)
+\label{35}
+\end{equation}
+
+Simultaneously, 
+\begin{equation}
+R(t+1) = R(t) + \alpha \* E\_{h}(t-1) \* s(t-2)^\mathrm{T} - \beta \* R(t)
+\label{36}
+\end{equation}
+
+Comparing these updating rules equation $\eqref{27}$ and equation $\eqref{35}$, equation $\eqref{28}$ and equation $\eqref{36}$,  we found they are in a **consistent** form. 
+The calculation procedure has nothing special, except the value of some variables is different. 
+Similarly, at time $t-2$, considering the cost function is $L(t)$, we can get these updating rules, 
+\begin{equation}
+ U(t+1) = U(t) + \alpha \* E\_{h}(t-2) \* x(t-2)^\mathrm{T} - \beta \* U(t) \\\
+ R(t+1) = R(t) + \alpha \* E\_{h}(t-2) \* s(t-3)^\mathrm{T} - \beta \* R(t) 
+\end{equation}
+
+But what is $E\_{h}(t-2)$?   
+
+Luckily, if we look the definition of $E\_{h}(t)$ carefully, we can find it is defined in a rescursive way.  
+$E\_{h}(t)$ is a function of $E\_{o}(t)$.  
+$E\_{h}(t-1)$ is a function of $E\_{h}(t)$.   
+No doubtly, $E\_{h}(t-2)$ will be a function of $E\_{h}(t-1)$ and so on.  
+
+Actually, $E\_{h-1}(t)$ means errors propagated from the output layer at time $t$ to the hidden layer at time $t-1$. Therefore we can say the error propagated in a recursive way.  
+The matrix in function $d$ is the interaction matrix between the layer error comes in  and the layer flows out. 
+For $E\_{h}(t)$, the interaction matrix  is $W$.   
+For $E\_{h}(t-1)$, the matrix is $R$.   
+For $E\_{h}(t-2)$ and later vector such as $E\_{h}(t-3)$, this martrix always is $R$. Because the error flows from current hidden layer to previous hidden layer and $R$ is the matrix between two hidden layers.
+
+Therefore we can get the form of $E\_{h}(t-2)$,
+
+\begin{equation}
+	E\_{h}(t-2) = d\_{h}(E\_{h}(t-1)^{\mathrm{T}}R,t-2)
+\end{equation}
+
+
 * Weight Updating Mechanism   
+There is still another question.  We already know derivative of $\frac{\partial{L(t)}}{\partial{u\_{ji}(t)}}$,
+$\frac{\partial{L(t)}}{\partial{u\_{ji}(t-1)}}$, $\frac{\partial{L(t)}}{\partial{u\_{ji}(t-2)}}$. 
+If we update them one by one, 
+the value of $U$ differs with time $t$ in the unfolded network. 
+But we must make sure $U$ will be the same at every time in the unfolded situation. 
+how to update $U$?  
+
 Suppose we have two variables, $M\_1$ and $M\_2$. 
  Their initial values are the same, say it is $M\_0$. At each step, we will update $M\_1$ and $M\_2$ by their derivatives $\frac{\partial{L}}{\partial{M\_1}}$
 and $\frac{\partial{L}}{\partial{M\_2}}$ respectively.  
@@ -285,5 +380,14 @@ M\_1^{new} =M\_1^{old} + \alpha \* (\frac{\partial{L}}{\partial{M\_1}}+\frac{\pa
 M\_2^{new} =M\_2^{old} + \alpha \* (\frac{\partial{L}}{\partial{M\_1}}+\frac{\partial{L}}{\partial{M\_2}})
 \end{equation}
 Since their initial values are the same and their derivatives are the same, their values will always be the same. And this weight updating mechanism considers derivative contributions from both side. 
+
+Now, we can get final updating rules of $W$, $U$, $R$, 
+\begin{equation}
+ W(t+1) = W(t) + \alpha \* E\_{o}(t) \* s(t)^\mathrm{T} - \beta \* W(t) \\\
+ U(t+1) = U(t) + \alpha \* \sum\_{m=0}^{M}{E\_{h}(t-m) \* x(t-m)^\mathrm{T}} - \beta \* U(t) \\\
+ R(t+1) = R(t) + \alpha \* \sum\_{m=0}^{M}{E\_{h}(t-m) \* s(t-m-1)^\mathrm{T}} - \beta \* R(t) 
+\end{equation}
+
+where $M$ is the steps for unfolding. 
 
 ##References
