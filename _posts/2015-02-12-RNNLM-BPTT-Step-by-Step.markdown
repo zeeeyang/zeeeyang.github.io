@@ -4,7 +4,7 @@ title: Recurrent Neural Network Language Model BPTT Step by Step
 date: 2015-02-12 19:15:38 
 categories: jekyll update
 ---
-**Recurrent Neural Network (RNN)** is known as to be able to capture longer history information compared to simple feedforward neural network language model.
+Compared to simple feedforward neural network language model, **Recurrent Neural Network (RNN)** is known as to be able to capture longer history information in sequential learning situations. 
 This advantage is achieved by including a recurrent unit in the hidden layer. 
 The output from the hidden layer in previous step will be the a part of input of the hidden layer in current step.
 Then history information can be encoded to the hidden layer neuron for next step computation.    
@@ -146,7 +146,7 @@ According to equation $\eqref{4}$ and $\eqref{8}$,
 \label{14}
 \end{equation}  
 
-Combining $\eqref{13}$ and $\eqref{14}$, we can achieve
+Combining $\eqref{13}$ and $\eqref{14}$, we can achieve  
 \begin{equation}
 \frac{\partial{L(t)}}{\partial{c\_{k}(t)}} = \sum\_{o=1}^{V}{\frac{\partial{L(t)}}{\partial{y\_o(t)}}\* \frac{\partial{y\_o(t)}}{\partial{c\_k(t)}}}
 = \sum\_{o=1}^{V}{\frac{d\_o(t)}{y\_o(t)} * (y\_o(t)\*\delta\_{o,k} - y\_o(t)*y\_k(t))} = \sum\_{o=1}^{V}{d\_o(t) * (\delta\_{o,k} - y\_k(t))} = d\_k(t) - y\_k(t)\*\sum\_{o=1}^{V}{d\_o(t)} = d\_k(t) - y\_k(t)
