@@ -2,7 +2,6 @@ name: "snnlpnet"
 markdown: redcarpet
 highlighter: pygments
 permalink: :title
-github: [https://github.com/snnlpnet/snnlpnet.github.io]
 exclude: [README.md, LICENSE, Makefile,nohup.out]
 
 # Information for the Atom feed
