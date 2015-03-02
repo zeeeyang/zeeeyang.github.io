@@ -13,12 +13,13 @@ Similar to feedforward network, we still use backpropagation alogrithm to optimi
 But the recurrent architecture makes the backpropagation procedure a little bit difficult for *newbies* to have a full understanding of mathematical details. 
 The backpropagation alogrithm used in recurrent neural network is so called **backprogagation through time (BPTT)**, where we need to consider the timestamp. 
 In this blog post, We intend to lay specail emphasis on mathematical details of BPTT alogrithm. 
+<!--
 Specifically, we will cover these questions:  
-
 +  How to unfold a recurrent network generally?  
 +  How to calculate derivatives only by chain rules?
 +  How to understand backpropagation from **Error Propagation**?
 +  What is the weight updating mechanism after unfolding? And why we need to do that?  
+-->
 
 After reading this blog, I hope you can have a better understanding of RNNLM and BPTT alogrithm.  
 
