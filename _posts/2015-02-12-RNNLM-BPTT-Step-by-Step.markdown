@@ -46,7 +46,7 @@ In a feedforward neural network language model, suppose we predict a word only b
 \label{2}
 \end{equation}
 
-Comaring equation $\eqref{1}$ and equation $\eqref{2}$, we also can tell the difference between feedforward netword and recurrent network since \\(s(t-1)\\) can contain longer history information not just limited to some local words.   
+Comparing equation $\eqref{1}$ and equation $\eqref{2}$, we also can tell the difference between feedforward netword and recurrent network since \\(s(t-1)\\) can contain longer history information not just limited to some local words.   
 
 ---
 
