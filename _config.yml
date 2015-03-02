@@ -2,8 +2,7 @@ name: "snnlpnet"
 markdown: redcarpet
 highlighter: pygments
 permalink: :title
-exclude: [README.md, LICENSE, Makefile,nohup.out]
-
+exclude: [README.md, LICENSE, Makefile, nohup.out]
 # Information for the Atom feed
 gereksiz:
    author: "ssnlpnet"
