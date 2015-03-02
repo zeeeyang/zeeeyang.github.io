@@ -146,6 +146,7 @@ Combining $\eqref{13}$ and $\eqref{14}$, we can achieve
 = \sum\_{o=1}^{V}{\frac{d\_o(t)}{y\_o(t)} * (y\_o(t)\*\delta\_{o,k} - y\_o(t)*y\_k(t))} = \sum\_{o=1}^{V}{d\_o(t) * (\delta\_{o,k} - y\_k(t))} = d\_k(t) - y\_k(t)\*\sum\_{o=1}^{V}{d\_o(t)} = d\_k(t) - y\_k(t)
 \label{15}
 \end{equation}
+
 where $\delta\_{o,k}=1$ when $o=k$, otherwise $\delta\_{o,k}=0$.
 $\sum\_{o=1}^{V}{d\_o(t)} = 1$ since only one element in $d(t)$ is $1$, others are $0$.   
 Equation $\eqref{15}$ is very important, so we give it a short name $e\_k(t)$ for later use. 
