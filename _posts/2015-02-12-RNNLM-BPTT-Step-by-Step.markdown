@@ -141,9 +141,10 @@ According to equation $\eqref{4}$ and $\eqref{8}$,
 \end{equation}  
 
 Combining $\eqref{13}$ and $\eqref{14}$, we can achieve  
+
 \begin{equation}
+
 \frac{\partial{L(t)}}{\partial{c\_{k}(t)}} = \sum\_{o=1}^{V}{\frac{\partial{L(t)}}{\partial{y\_o(t)}}\* \frac{\partial{y\_o(t)}}{\partial{c\_k(t)}}}
-= \sum\_{o=1}^{V}{\frac{d\_o(t)}{y\_o(t)} * (y\_o(t)\*\delta\_{o,k} - y\_o(t)*y\_k(t))} = \sum\_{o=1}^{V}{d\_o(t) * (\delta\_{o,k} - y\_k(t))} = d\_k(t) - y\_k(t)\*\sum\_{o=1}^{V}{d\_o(t)} = d\_k(t) - y\_k(t)
 \label{15}
 \end{equation}
 
