@@ -378,7 +378,7 @@ M\_2^{new} =M\_2^{old} + \alpha \* (\frac{\partial{L}}{\partial{M\_1}}+\frac{\pa
 \end{equation}
 Since their initial values are the same and their derivatives are the same, their values will always be the same. And this weight updating mechanism considers derivative contributions from both side. 
 
-We use this mechanism to update weight of $U$ and $R$. 
+We use this mechanism to update weights of $U$ and $R$. 
 
 Now, we can get final updating rules of $W$, $U$ and $R$, 
 \begin{equation}
