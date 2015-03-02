@@ -11,6 +11,5 @@ I Believe
 > God help those who help themselves.  
 
 ##Contact
-Email: kyleteng#outlook.com  
-    (please replace # with @.)
+Email:ssnlpnet gmail
 [SUTD]: http://www.sutd.edu.sg
