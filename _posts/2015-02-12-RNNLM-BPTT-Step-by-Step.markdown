@@ -168,23 +168,23 @@ This term is very easy. By using equation $\eqref{7}$, we can get
 Now, we replace equation $\eqref{16}$ and equation $\eqref{17}$ into equation $\eqref{12}$, we can get what we want.
 
 \begin{equation}
-\frac{\partial{L(t)}}{\partial{w\_{kh}(t)}} = e\_k(t) * s\_h(t)
+\frac{\partial{L(t)}}{\partial{w\_{kh}(t)}} = e\_k(t) \* s\_h(t)
 \label{18}
 \end{equation}
 
 Wow...simple and beautiful, isn't it?  
 So the updating rule for $w\_{kh}$ is 
 \begin{equation}
-w\_{kh}(t+1) = w\_{kh}(t) + \alpha\*e\_k(t) * s\_h(t)-\beta\*w\_{kh}(t)
+w\_{kh}(t+1) = w\_{kh}(t) + \alpha\*e\_k(t) \* s\_h(t)-\beta\*w\_{kh}(t)
 \end{equation}
 And using the maxtrix-vector notation,  
 
 \begin{equation}
-W(t+1) = W(t) + \alpha\*E_{o}(t) * s(t)^\mathrm{T}-\beta\*W(t)
+W(t+1) = W(t) + \alpha\*E\_{o}(t) \* s(t)^\mathrm{T}-\beta\*W(t)
 \label{20}
 \end{equation}
 
-**$E_{o}(t)$** is a vector of $\{e\_k(t)\}$. It stands for the *errors* of the output. 
+**$E\_{o}(t)$** is a vector of $\{e\_k(t)\}$. It stands for the *errors* of the output. 
 
 
 ### Updating $U$ 
@@ -210,7 +210,7 @@ Then we can calculate $\frac{\partial{L(t)}}{\partial{s\_{j}(t)}}$,
 \label{22}
 \end{equation}
 
-$W_j$ denotes the $j$-th column vector of $W$.   
+$W\_j$ denotes the $j$-th column vector of $W$.   
 Continue going forward and by use of equation $\eqref{3}$ and equation $\eqref{22}$, we can get
 \begin{equation}
 \frac{\partial{L(t)}}{\partial{b\_{j}(t)}} = \frac{\partial{L(t)}}{\partial{s\_{j}(t)}} \* \frac{\partial{s\_{j}(t)}}{\partial{b\_{j}(t)}}
@@ -220,7 +220,7 @@ Continue going forward and by use of equation $\eqref{3}$ and equation $\eqref{2
 
 And now, we can compute $\frac{\partial{L(t)}}{\partial{u\_{ji}(t)}} $,
 \begin{equation}
-\frac{\partial{L(t)}}{\partial{u\_{ji}(t)}} =\frac{\partial{L(t)}}{\partial{b\_{j}(t)}} * \frac{\partial{b\_{j}(t)}}{\partial{u\_{ji}(t)}}
+\frac{\partial{L(t)}}{\partial{u\_{ji}(t)}} =\frac{\partial{L(t)}}{\partial{b\_{j}(t)}} \* \frac{\partial{b\_{j}(t)}}{\partial{u\_{ji}(t)}}
 = E\_{o}(t)^\mathrm{T} \* W\_j \* s\_{j}(t) \* (1-s\_{j}(t)) \* x\_i(t)
 \label{24}
 \end{equation}
@@ -248,7 +248,7 @@ And now the target matrix $E\_{h}(t)=d\_{h}(E\_{o}(t)^\mathrm{T}W,t)$.
 $E\_{h}(t)$ is a function of $E\_{o}(t)^\mathrm{T}W$. 
 $E\_{o}(t)$ is the error of output layer. $E\_{o}(t)^\mathrm{T}W$ is the error propagated from output layer to hidden layer. 
 Actually, $E\_{h}(t)$ is the error accumulated at the hidden layer. 
-It seems error **propagated recursively** from output layer to hidden layer under the function $d_{h}$ and the matrix $w$ between these two layers. Interesting....!!!
+It seems error **propagated recursively** from output layer to hidden layer under the function $d\_{h}$ and the matrix $w$ between these two layers. Interesting....!!!
 
 Remember we want to obtain the maxtrix-vector form to update $U$. Using $E\_{h}(t)$, the updating rule is
 \begin{equation}
@@ -267,8 +267,6 @@ R(t+1) = R(t) + \alpha \* E\_{h}(t) \* s(t-1)^\mathrm{T} - \beta \* R(t)
 ---
 ##Backward Progagation Through Time
 
-* Why BPTT?(todo)
-
 * Unfolding  
 ![Figure 3](/images/unfold_rnn.png "Unfolding Recurrent Neural Network") 
 
@@ -283,10 +281,10 @@ According to $\eqref{23}$, we all already know $\frac{\partial{L(t)}}{\partial{b
 
 \begin{equation}
 \frac{\partial{L(t)}}{\partial{s\_{j}(t-1)}} = \sum\_{k=1}^{H}{\frac{\partial{L(t)}}{\partial{b\_{k}(t)}} \* \frac{\partial{b\_{k}(t)}}{\partial{s\_{j}(t-1)}}}
-= \sum\_{k=1}^{H}{E\_{hk}(t)*r\_{kj}(t)} = E\_h(t)^{\mathrm{T}} * R\_j
+= \sum\_{k=1}^{H}{E\_{hk}(t)\*r\_{kj}(t)} = E\_h(t)^{\mathrm{T}} \* R\_j
 \end{equation}
 
-~~~very similar to equation $\eqref{22}$, $R_j$ means the $j$-th column of matrix $R$. 
+~~~very similar to equation $\eqref{22}$, $R\_j$ means the $j$-th column of matrix $R$. 
 
 \begin{equation}
 \frac{\partial{L(t)}}{\partial{b\_{j}(t-1)}}  = \frac{\partial{L(t)}}{\partial{s\_{j}(t-1)}} \* \frac{
@@ -294,12 +292,12 @@ According to $\eqref{23}$, we all already know $\frac{\partial{L(t)}}{\partial{b
 }{
 \partial{b\_{j}(t-1)}
 }
-= E\_h(t)^{\mathrm{T}} * R\_j \* s\_{j}(t-1) \* (1-s\_{j}(t-1) ) 
+= E\_h(t)^{\mathrm{T}} \* R\_j \* s\_{j}(t-1) \* (1-s\_{j}(t-1) ) 
 \end{equation}
 
 Using the function defined in $\eqref{26}$, we found
 \begin{equation}
- E\_h(t)^{\mathrm{T}} * R\_j \* s\_{j}(t-1) \* (1-s\_{j}(t-1) ) = d\_{hj}(E\_h(t)^{\mathrm{T}}\*R, t-1)
+ E\_h(t)^{\mathrm{T}} \* R\_j \* s\_{j}(t-1) \* (1-s\_{j}(t-1) ) = d\_{hj}(E\_h(t)^{\mathrm{T}}\*R, t-1)
 \end{equation}
 
 Therefore, 
@@ -311,8 +309,8 @@ For convenience, we define $E\_{hj}(t-1)=d\_{h,j}(E\_{h}(t)^\mathrm{T}R,t-1)$, a
 
 Then, 
 \begin{equation}
- \frac{\partial{L(t)}}{\partial{u\_{ji}(t-1)}} = \frac{\partial{L(t)}}{\partial{b\_{j}(t-1)}} * \frac{\partial{b\_{j}(t-1)}}{\partial{u\_{ji}(t-1)}} 
- = d\_{hj}(E\_h(t-1)^{\mathrm{T}}\*R, t-1) * x\_{i}(t-1)
+ \frac{\partial{L(t)}}{\partial{u\_{ji}(t-1)}} = \frac{\partial{L(t)}}{\partial{b\_{j}(t-1)}} \* \frac{\partial{b\_{j}(t-1)}}{\partial{u\_{ji}(t-1)}} 
+ = d\_{hj}(E\_h(t-1)^{\mathrm{T}}\*R, t-1) \* x\_{i}(t-1)
 \end{equation}
 
 Similar to equation $\eqref{27}$, we can get the target updating rule,
