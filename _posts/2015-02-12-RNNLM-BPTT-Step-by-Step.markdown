@@ -2,7 +2,7 @@
 layout: post
 title: Recurrent Neural Network Language Model BPTT Step by Step
 date: 2015-02-12 19:15:38 
-categories: jekyll update
+categories: rnnlm
 ---
 Compared to simple feedforward neural network language model, **Recurrent Neural Network (RNN)** is known as to be able to capture longer history information in sequential learning situations. 
 This advantage is achieved by including a recurrent unit in the hidden layer. 

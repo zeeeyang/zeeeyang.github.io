@@ -2,7 +2,7 @@
 layout: post
 title: RNNLM Implementation (2) Build Vocabulary
 date:  2015-04-19 20:30
-categories: jekyll update
+categories: rnnlm
 ---
 In the previous post, I generally introduce the code framework of rnnlm. 
 Especially I focus on the training part. 
