@@ -69,7 +69,12 @@ while( iter < maxIter ){
  saveNet(); //save the whole neural network
 }
 {% endhighlight %}
-##The main code 
+We have five main procedures here:  
+- **Build Vocabulary** read corpus word by word, turn each word into int and maintain structures to find words  
+- **Initialize weights** randomly assgin values for network parameters  
+- **Forward Computation** compute output through the network structure  
+- **Backward Propagation** update parameters of neural network  
+- **Save Model** save parameters of neural network to file  
 ##Building Vocabulary
 ###learnVocabFromFile
 ###addWordToVocab
