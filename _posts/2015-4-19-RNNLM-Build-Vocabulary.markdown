@@ -87,6 +87,7 @@ for ( a = 1; a < vocab_size; a++) {
    max = a;
    for ( b = a+1; b < vocab_size; b++) {
 	if ( vocab[ max ].cn < vocab[ b ].cn ) max = b;
+   }
    swap = vocab [ max ];
    vocab[ max ]  = vocab[ a ];
    vocab[ a ] = swap; 
