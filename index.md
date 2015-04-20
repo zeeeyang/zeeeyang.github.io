@@ -10,5 +10,6 @@ title: snnlpnet
       <li><span>&gt; {{ post.date | date_to_string }}</span> <a href="{{ post.url }}">{{ post.title }}</a></li>
       {% endfor %}
    </ul>
-   <p><a href="/atom.xml"> Atom Feed.</a>&nbsp;&nbsp;<a href="/about"> About </a> </p>
+   <p><a href="/categories.html">Categories</a>&nbsp;&nbsp;<a href="/tags.html">Tags</a> &nbsp;&nbsp;
+<a href="/atom.xml"> Atom Feed.</a>&nbsp;&nbsp;<a href="/about"> About </a> </p>
 </div>
