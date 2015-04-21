@@ -125,7 +125,7 @@ The "new_classes" algorithm is faster than the "old_classes" algorithm for later
 ###neuron 
 For each neuron, neuron.ac = 0 and neuron.er = 0. 
 ###synapse
-For each synapse, syn.weight = random(-0.1,0.1) + random(-0.1, 0.1) + random(-0.1, 0.1)
+For each synapse, syn.weight = random(-0.1,0.1) + random(-0.1, 0.1) + random(-0.1, 0.1)  
 plans
 ##Direct Connections
 ##BPTT Init
