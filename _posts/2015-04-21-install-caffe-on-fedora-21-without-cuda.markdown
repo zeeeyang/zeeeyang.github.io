@@ -44,7 +44,7 @@ We add **lapack** in find\_library.
 <pre>
 cp Makefile.config.example Makefile.config
 </pre>
-Modify Makefile.config:
+Modify Makefile.config:  
 1. Comment Out Line 8.   
 Change  
 <pre>
