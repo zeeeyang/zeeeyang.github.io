@@ -55,9 +55,42 @@ But how to make classes over words?
 The author uses a **frequency-based** method. 
 Suppose we are given $10$ words $w_1, w_2, \dots, w_{10}$ and the class size is $5$. 
 The frequency of word counts is shown in table below.   
-| $w_1$ | $w_2$ | $w_3$ | $w_4$ | $w_5$ | $w_6$ | $w_7$ | $w_8$ | $w_9$ | $w_{10}$ |
-| --  | --  | --  | --  | --  | --  | --  | --  | --  | --   | 
-| 40  | 30  | 10  |  5  | 5   |  2  | 2   | 2   | 2   | 2    | 
+
+| $w_1$ | $w_2$ | $w_3$ | $w_4$ | $w_5$ | $w_6$ | $w_7$ | $w_8$ | $w_9$ | $w_{10}$ |  
+| :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |   
+| 40  | 30  | 10  |  5  | 5   |  2  | 2   | 2   | 2   | 2    |   
+
+Remember that the vocabulary is already sorted by word frequency from high to low.   
+The algorithm divides words into $5$ bins by code below. 
+{% highlight cpp linenos %}
+a = 0;
+for(i = 0; i < vocab_size; i++) b += vocab[i].cn;
+for(i = 0; i < vocab_size; i++) {
+    df += vocab[i].cn /(double) b;
+    if( df > 1 ) df = 1;
+    if( df > (a+1) /(double)class_size ){
+        vocab[i].class_index = a; 
+        if ( a < class_size -1  ) a++;
+    } else {
+        vocab[i].class_index = a;
+    }
+}
+{% endhighlight %}
+Firstly, it collects the total count of words, $b = 100$ here.   
+Then, it calculate the accumulated frequency as $df$, shown as table below.  
+
+| $w_1$  | $w_2$ | $w_3$ | $w_4$ | $w_5$ | $w_6$ | $w_7$ | $w_8$ | $w_9$ | $w_{10}$ |
+| :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | 
+| $\frac{40}{100}$  | $\frac{70}{100}$ | $\frac{80}{100}$| $\frac{85}{100}$ | $\frac{90}{100}$|  $\frac{92}{100}$| $\frac{94}{100}$| $\frac{96}{100}$| $\frac{98}{100}$| $1$  |   
+
+$df$ will be compared with $\frac{1}{5}$, $\frac{2}{5}$, $\frac{3}{5}$, $\frac{4}{5}$ and $1$.  
+
+| word | $w_1$  | $w_2$ | $w_3$ | $w_4$ | $w_5$ | $w_6$ | $w_7$ | $w_8$ | $w_9$ | $w_{10}$ |
+|:--------------| :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | 
+|frequency | $\frac{40}{100}$  | $\frac{70}{100}$ | $\frac{80}{100}$| $\frac{85}{100}$ | $\frac{90}{100}$|  $\frac{92}{100}$| $\frac{94}{100}$| $\frac{96}{100}$| $\frac{98}{100}$| $1$  |   
+|Compared to| $\frac{1}{5}$ | $\frac{2}{5}$ |$\frac{3}{5}$ |$\frac{4}{5}$ |$1$ |$1$ |$1$ |$1$ |$1$ |$1$ |
+|class_index| 0 | 1 | 2 | 3| 4| 4| 4| 4| 4| 4| 
+
 ##Direct Connections
 ##BPTT Init
 ##Init Weight
