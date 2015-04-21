@@ -50,8 +50,14 @@ Only one variable *class_size* here needs further explaination.
 Why we need to make classes over word? 
 One reason is to speed up the calculation on the output layer.   
 Instead of directly calculating the probability $P( word | context )$, we predict word by $P(class | context ) * P ( word | class, context )$.  
-
-##Make Classes
+##Make classes
+But how to make classes over words?  
+The author uses a **frequency-based** method. 
+Suppose we are given $10$ words $w_1, w_2, \dots, w_{10}$ and the class size is $5$. 
+The frequency of word counts is shown in table below.   
+| $w_1$ | $w_2$ | $w_3$ | $w_4$ | $w_5$ | $w_6$ | $w_7$ | $w_8$ | $w_9$ | $w_{10}$ |
+| --  | --  | --  | --  | --  | --  | --  | --  | --  | --   | 
+| 40  | 30  | 10  |  5  | 5   |  2  | 2   | 2   | 2   | 2    | 
 ##Direct Connections
 ##BPTT Init
 ##Init Weight
