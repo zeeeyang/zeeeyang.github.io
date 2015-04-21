@@ -18,6 +18,8 @@ During installation, I met with many problems. This post records these problems 
 [Cuda 7](https://developer.nvidia.com/cuda-downloads) is still not available on fedora 21. 
 Cuda 6.5 can't be complied using the default gcc complier. 
 Therefore, I don't install cuda and only use the cpu mode of caffe.   
+
+Some solutions here also can be used to install [nlpcaffe](https://github.com/Russell91/nlpcaffe).  
 ##Basic Installation
 First, follow the [fedora installing instruction](http://caffe.berkeleyvision.org/install_yum.html) to install dependency packages. 
 ##Problem 1
