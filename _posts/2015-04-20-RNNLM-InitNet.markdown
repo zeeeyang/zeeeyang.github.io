@@ -63,7 +63,7 @@ The frequency of word counts is shown in table below.
 Remember that the vocabulary is already sorted by word frequency from high to low.   
 The algorithm divides words into $5$ bins by code below. 
 {% highlight cpp linenos %}
-a = 0;
+a = 0; df = 0;
 for(i = 0; i < vocab_size; i++) b += vocab[i].cn;
 for(i = 0; i < vocab_size; i++) {
     df += vocab[i].cn /(double) b;
@@ -87,10 +87,45 @@ $df$ will be compared with $\frac{1}{5}$, $\frac{2}{5}$, $\frac{3}{5}$, $\frac{4
 
 | word | $w_1$  | $w_2$ | $w_3$ | $w_4$ | $w_5$ | $w_6$ | $w_7$ | $w_8$ | $w_9$ | $w_{10}$ |
 |:--------------| :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | 
-|frequency | $\frac{40}{100}$  | $\frac{70}{100}$ | $\frac{80}{100}$| $\frac{85}{100}$ | $\frac{90}{100}$|  $\frac{92}{100}$| $\frac{94}{100}$| $\frac{96}{100}$| $\frac{98}{100}$| $1$  |   
+| df | $\frac{40}{100}$  | $\frac{70}{100}$ | $\frac{80}{100}$| $\frac{85}{100}$ | $\frac{90}{100}$|  $\frac{92}{100}$| $\frac{94}{100}$| $\frac{96}{100}$| $\frac{98}{100}$| $1$  |   
 |Compared to| $\frac{1}{5}$ | $\frac{2}{5}$ |$\frac{3}{5}$ |$\frac{4}{5}$ |$1$ |$1$ |$1$ |$1$ |$1$ |$1$ |
 |class_index| 0 | 1 | 2 | 3| 4| 4| 4| 4| 4| 4| 
 
+This algorithm tends to make high frequency word into a small class and low frequency into a large class. For example, $class_0$ only has one element and $class_4$ has six elements.   
+There is an another algorithm for the same purpose. The previous approach is called as "old_classes". In "new_classes" algorithm, the $df$ claculation is different. 
+{% highlight cpp linenos %}
+a = 0; df=0; dd = 0;
+for(i = 0; i < vocab_size; i++) b += vocab[i].cn;
+for(i = 0; i < vocab_size; i++) dd += sqrt(vocab[i].cn/(double) b);
+for(i = 0; i < vocab_size; i++) {
+    df += sqrt(vocab[i].cn /(double) b ) / dd ;
+    if( df > 1 ) df = 1;
+    if( df > (a+1) /(double)class_size ){
+        vocab[i].class_index = a; 
+        if ( a < class_size -1  ) a++;
+    } else {
+        vocab[i].class_index = a;
+    }
+}
+{%endhighlight%}
+In Line 5, we use $\frac{\sqrt{ \frac{vocab[i].cn}{b}}}{dd}$ to replace $\frac{vocab[i].cn}{b}$.   
+
+| word | $w_1$  | $w_2$ | $w_3$ | $w_4$ | $w_5$ | $w_6$ | $w_7$ | $w_8$ | $w_9$ | $w_{10}$ |
+|:--------------| :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | 
+| df | 0.2386 | 0.4452 | 0.5645 | 0.6488 | 0.7332 | 0.7865 | 0.8399 | 0.8932 | 0.9466 | 1.0 |
+|Compared to| $\frac{1}{5}$ | $\frac{2}{5}$ |$\frac{3}{5}$ |$\frac{4}{5}$ |$1$ |$1$ |$1$ |$1$ |$1$ |$1$ |
+|class_index| 0 | 1 | 2 | 3| 3 | 3 | 4| 4| 4| 4| 
+
+We can see something different now. 
+The class index of word $w_5$ and $w_6$ changes to 3. 
+This algorithm can make word distributed less skewed. 
+It makes some tradeoff between frequency distribution and number of words in a class. 
+The "new_classes" algorithm is faster than the "old_classes" algorithm for later network calculations. 
+##Init Weight
+###neuron 
+For each neuron, neuron.ac = 0 and neuron.er = 0. 
+###synapse
+For each synapse, syn.weight = random(-0.1,0.1) + random(-0.1, 0.1) + random(-0.1, 0.1)
+plans
 ##Direct Connections
 ##BPTT Init
-##Init Weight
