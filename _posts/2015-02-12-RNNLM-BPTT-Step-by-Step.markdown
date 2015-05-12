@@ -53,20 +53,20 @@ Comparing equation $\eqref{1}$ and equation $\eqref{2}$, we also can tell the di
 ##Feedforward Propagation  
 Usually, the non-linear transform function in hidden layer and output layer is **sigmoid function** $f$ and **softmax function** $g$ respectively. There are other options for $f$ and $g$, but the basic idea is the same.
 First, we look at function $f$,
-$$ f(x) = \frac{1}{1+\mathrm{e}^{-x}} $$
+$$ f(x) = \frac{1}{ 1+\mathrm{e}\^{-x}} $$ 
 And the derivation of $f(x)$ with respect to $x$ has an interesting property,
 \begin{equation}
- f^\prime(x) = f(x) (1-f(x)) 
+ f\^\prime(x) = f(x) (1-f(x)) 
 \label{3}
 \end{equation}
 We will use equation $\eqref{3}$ many times later.  The form of $g$ is,
 \begin{equation}
-g(c\_k) = \frac{\mathrm{e}^{c\_k}}{\sum\_{k}\mathrm{e}^{c\_k}}
+g(c\_k) = \frac{\mathrm{e}\^{c\_k}}{\sum\_{k}\mathrm{e}\^{c\_k}}
 \label{4}
 \end{equation}  
 
 \begin{equation}
- b\_j(t) = \sum\_{i=1}^{V}x\_i(t)\*u\_{ji}(t) + \sum\_{h=1}^{H}s\_l(t-1)\*r\_{jl}(t)
+ b\_j(t) = \sum\_{i=1}\^{V}x\_i(t)\*u\_{ji}(t) + \sum\_{h=1}\^{H}s\_l(t-1)\*r\_{jl}(t)
 \label{5}
 \end{equation}
 
@@ -76,7 +76,7 @@ s\_j(t) = f(b\_j(t))
 \end{equation}
 
 \begin{equation}
-c\_k(t) = \sum\_{h=1}^{H}s\_h(t)\*w\_{kh}(t)
+c\_k(t) = \sum\_{h=1}\^{H}s\_h(t)\*w\_{kh}(t)
 \label{7}
 \end{equation}
 \begin{equation}
@@ -93,7 +93,7 @@ There is only one component in $d(t)$ is $1$, others are $0$.
 We want to minimize the distance between  $y(t)$ and $d(t)$.   
 Since $d(t)$ and $y(t)$ are two probability distributions, we can define a distance function between $d(t)$ and $y(t)$ by cross entropy criterion,
 \begin{equation}
-    L(t) = -\sum\_{k=1}^{V} d\_k(t)\log y\_k(t)
+    L(t) = -\sum\_{k=1}\^{V} d\_k(t)\log y\_k(t)
 \label{9}
 \end{equation}
 $U$,$R$,$W$ are parameters in RNNLM. 
@@ -102,7 +102,7 @@ Commonly, **Stochastic Gradient Descent** can find good enough parameters in a m
 Instead of using gradient descent, the author **Tomas Mikolov** employs stochastic gradient ascent to learn parameters. 
 We follow his way in this post.
 \begin{equation}
-    L(t) = \sum\_{k=1}^{V} d\_k(t)\log y\_k(t)
+    L(t) = \sum\_{k=1}\^{V} d\_k(t)\log y\_k(t)
 \label{10}
 \end{equation}
 
@@ -123,7 +123,7 @@ According to the chain, we can calculate $\frac{\partial{L(t)}}{\partial{w\_{kh}
 \begin{equation}
   \frac{\partial{L(t)}}{\partial{w\_{kh}(t)}} = 
   \frac{\partial{L(t)}}{\partial{c\_{k}(t)}} \* \frac{\partial{c\_{k}(t)}}{\partial{w\_{kh}(t)}}
-  =(\sum\_{o=1}^{V}{\frac{\partial{L(t)}}{\partial{y\_o(t)}}\* \frac{\partial{y\_o(t)}}{\partial{c\_k(t)}}}) \* \frac{\partial{c\_{k}(t)}}{\partial{w\_{kh}(t)}}
+  =(\sum\_{o=1}\^{V}{\frac{\partial{L(t)}}{\partial{y\_o(t)}}\* \frac{\partial{y\_o(t)}}{\partial{c\_k(t)}}}) \* \frac{\partial{c\_{k}(t)}}{\partial{w\_{kh}(t)}}
   \label{12}
 \end{equation}
 There are three items here, $\frac{\partial{L(t)}}{\partial{y\_o(t)}}$,$\frac{\partial{y\_o(t)}}{\partial{c\_k(t)}}$,$\frac{\partial{c\_{k}(t)}}{\partial{w\_{kh}}(t)}$. We will handle them one by one **from backward to forward**.  
@@ -142,13 +142,13 @@ According to equation $\eqref{4}$ and $\eqref{8}$,
 
 Combining $\eqref{13}$ and $\eqref{14}$, we can achieve  
 \begin{equation}
-\frac{\partial{L(t)}}{\partial{c\_{k}(t)}} = \sum\_{o=1}^{V}{\frac{\partial{L(t)}}{\partial{y\_o(t)}}\*\frac{\partial{y\_o(t)}}{\partial{c\_k(t)}}}
-= \sum\_{o=1}^{V}{\frac{d\_o(t)}{y\_o(t)} \* (y\_o(t)\*\delta\_{o,k} - y\_o(t)\*y\_k(t))} = \sum\_{o=1}^{V}{d\_o(t) \* (\delta\_{o,k} - y\_k(t))} = d\_k(t) - y\_k(t)\*\sum\_{o=1}^{V}{d\_o(t)} = d\_k(t) - y\_k(t)
+\frac{\partial{L(t)}}{\partial{c\_{k}(t)}} = \sum\_{o=1}\^{V}{\frac{\partial{L(t)}}{\partial{y\_o(t)}}\*\frac{\partial{y\_o(t)}}{\partial{c\_k(t)}}}
+= \sum\_{o=1}\^{V}{\frac{d\_o(t)}{y\_o(t)} \* (y\_o(t)\*\delta\_{o,k} - y\_o(t)\*y\_k(t))} = \sum\_{o=1}\^{V}{d\_o(t) \* (\delta\_{o,k} - y\_k(t))} = d\_k(t) - y\_k(t)\*\sum\_{o=1}\^{V}{d\_o(t)} = d\_k(t) - y\_k(t)
 \label{15}
 \end{equation}
 
 where $\delta\_{o,k}=1$ when $o=k$, otherwise $\delta\_{o,k}=0$.
-$\sum\_{o=1}^{V}{d\_o(t)} = 1$ since only one element in $d(t)$ is $1$, others are $0$.   
+$\sum\_{o=1}\^{V}{d\_o(t)} = 1$ since only one element in $d(t)$ is $1$, others are $0$.   
 Equation $\eqref{15}$ is very important, so we give it a short name $e\_k(t)$ for later use. 
 
 \begin{equation}
@@ -180,7 +180,7 @@ w\_{kh}(t+1) = w\_{kh}(t) + \alpha\*e\_k(t) \* s\_h(t)-\beta\*w\_{kh}(t)
 And using the maxtrix-vector notation,  
 
 \begin{equation}
-W(t+1) = W(t) + \alpha\*E\_{o}(t) \* s(t)^\mathrm{T}-\beta\*W(t)
+W(t+1) = W(t) + \alpha\*E\_{o}(t) \* s(t)\^\mathrm{T}-\beta\*W(t)
 \label{20}
 \end{equation}
 
@@ -202,11 +202,11 @@ we can start from $\frac{\partial{c\_{k}(t)}}{\partial{s\_{j}(t)}}$ to speed our
 
 Then we can calculate $\frac{\partial{L(t)}}{\partial{s\_{j}(t)}}$, 
 \begin{equation}
-\frac{\partial{L(t)}}{\partial{s\_{j}(t)}} = \sum\_{k=1}^{V}{
+\frac{\partial{L(t)}}{\partial{s\_{j}(t)}} = \sum\_{k=1}\^{V}{
 	\frac{\partial{L(t)}}{\partial{c\_{k}(t)}} \*
 	\frac{\partial{c\_{k}(t)}}{\partial{s\_{j}(t)}}
 }
-=\sum\_{k=1}^{V}{e\_{k}(t)\*w\_{kj}(t)} = E\_{o}(t)^\mathrm{T} \* W\_j
+=\sum\_{k=1}\^{V}{e\_{k}(t)\*w\_{kj}(t)} = E\_{o}(t)\^\mathrm{T} \* W\_j
 \label{22}
 \end{equation}
 
@@ -214,45 +214,45 @@ $W\_j$ denotes the $j$-th column vector of $W$.
 Continue going forward and by use of equation $\eqref{3}$ and equation $\eqref{22}$, we can get
 \begin{equation}
 \frac{\partial{L(t)}}{\partial{b\_{j}(t)}} = \frac{\partial{L(t)}}{\partial{s\_{j}(t)}} \* \frac{\partial{s\_{j}(t)}}{\partial{b\_{j}(t)}}
-= E\_{o}(t)^\mathrm{T} \* W\_j \* s\_{j}(t) \* (1-s\_{j}(t))
+= E\_{o}(t)\^\mathrm{T} \* W\_j \* s\_{j}(t) \* (1-s\_{j}(t))
 \label{23}
 \end{equation}
 
 And now, we can compute $\frac{\partial{L(t)}}{\partial{u\_{ji}(t)}} $,
 \begin{equation}
 \frac{\partial{L(t)}}{\partial{u\_{ji}(t)}} =\frac{\partial{L(t)}}{\partial{b\_{j}(t)}} \* \frac{\partial{b\_{j}(t)}}{\partial{u\_{ji}(t)}}
-= E\_{o}(t)^\mathrm{T} \* W\_j \* s\_{j}(t) \* (1-s\_{j}(t)) \* x\_i(t)
+= E\_{o}(t)\^\mathrm{T} \* W\_j \* s\_{j}(t) \* (1-s\_{j}(t)) \* x\_i(t)
 \label{24}
 \end{equation}
 
 Therefore, we can update $u\_{ji}(t)$ by 
 \begin{equation}
-u\_{ji}(t+1) = u\_{ji}(t) + \alpha \* E\_{o}(t)^\mathrm{T} \* W\_j \* s\_{j}(t) \* (1-s\_{j}(t)) \* x\_i(t) - \beta \* u\_{ji}(t)
+u\_{ji}(t+1) = u\_{ji}(t) + \alpha \* E\_{o}(t)\^\mathrm{T} \* W\_j \* s\_{j}(t) \* (1-s\_{j}(t)) \* x\_i(t) - \beta \* u\_{ji}(t)
 \label{25}
 \end{equation}
 
 However, this equation $\eqref{25}$ is too long. We want to make it like equation $\eqref{20}$ using the matrix-vector notation style.   
 
-Compare to equation $\eqref{20}$, we need to ensure $E\_{o}(t)^\mathrm{T} \* W\_j \* s\_{j}(t) \* (1-s\_{j}(t))$ to be the $j$-th element of a certain vector. 
+Compare to equation $\eqref{20}$, we need to ensure $E\_{o}(t)\^\mathrm{T} \* W\_j \* s\_{j}(t) \* (1-s\_{j}(t))$ to be the $j$-th element of a certain vector. 
 Suppose we call this vector as $E\_{h}(t)$ and $E\_{hj}(t)$ is the corresponding $j$-th element.   
 
-And we define $d\_{hj}(E\_{o}(t)^\mathrm{T},t)$ to refer this calculation for convenience, which clearly means $E\_{hj}(t)=d\_{hj}(E\_{o}(t)^\mathrm{T}W,t)$.
+And we define $d\_{hj}(E\_{o}(t)\^\mathrm{T},t)$ to refer this calculation for convenience, which clearly means $E\_{hj}(t)=d\_{hj}(E\_{o}(t)\^\mathrm{T}W,t)$.
 
 \begin{equation}
-d\_{hj}(E\_{o}(t)^\mathrm{T}W,t) = E\_{o}(t)^\mathrm{T} \* W\_{j} \* f^\mathrm{\prime}(s\_{j}(t)) 
-= E\_{o}(t)^\mathrm{T} \* W\_j \* s\_{j}(t) \* (1-s\_{j}(t)) 
+d\_{hj}(E\_{o}(t)\^\mathrm{T}W,t) = E\_{o}(t)\^\mathrm{T} \* W\_{j} \* f\^\mathrm{\prime}(s\_{j}(t)) 
+= E\_{o}(t)\^\mathrm{T} \* W\_j \* s\_{j}(t) \* (1-s\_{j}(t)) 
 \label{26}
 \end{equation}
 
-And now the target matrix $E\_{h}(t)=d\_{h}(E\_{o}(t)^\mathrm{T}W,t)$.   
-$E\_{h}(t)$ is a function of $E\_{o}(t)^\mathrm{T}W$. 
-$E\_{o}(t)$ is the error of output layer. $E\_{o}(t)^\mathrm{T}W$ is the error propagated from output layer to hidden layer. 
+And now the target matrix $E\_{h}(t)=d\_{h}(E\_{o}(t)\^\mathrm{T}W,t)$.   
+$E\_{h}(t)$ is a function of $E\_{o}(t)\^\mathrm{T}W$. 
+$E\_{o}(t)$ is the error of output layer. $E\_{o}(t)\^\mathrm{T}W$ is the error propagated from output layer to hidden layer. 
 Actually, $E\_{h}(t)$ is the error accumulated at the hidden layer. 
 It seems error **propagated recursively** from output layer to hidden layer under the function $d\_{h}$ and the matrix $w$ between these two layers. Interesting....!!!
 
 Remember we want to obtain the maxtrix-vector form to update $U$. Using $E\_{h}(t)$, the updating rule is
 \begin{equation}
-U(t+1) = U(t) + \alpha \* E\_{h}(t) \* x(t)^\mathrm{T} - \beta \* U(t)
+U(t+1) = U(t) + \alpha \* E\_{h}(t) \* x(t)\^\mathrm{T} - \beta \* U(t)
 \label{27}
 \end{equation}
 ### Updating $R$ 
@@ -260,7 +260,7 @@ U(t+1) = U(t) + \alpha \* E\_{h}(t) \* x(t)^\mathrm{T} - \beta \* U(t)
 Similarly to update $U$, we can get the updating rules of $R$,
 
 \begin{equation}
-R(t+1) = R(t) + \alpha \* E\_{h}(t) \* s(t-1)^\mathrm{T} - \beta \* R(t)
+R(t+1) = R(t) + \alpha \* E\_{h}(t) \* s(t-1)\^\mathrm{T} - \beta \* R(t)
 \label{28}
 \end{equation}
 
@@ -280,8 +280,8 @@ According to $\eqref{23}$, we all already know $\frac{\partial{L(t)}}{\partial{b
 \end{equation}
 
 \begin{equation}
-\frac{\partial{L(t)}}{\partial{s\_{j}(t-1)}} = \sum\_{k=1}^{H}{\frac{\partial{L(t)}}{\partial{b\_{k}(t)}} \* \frac{\partial{b\_{k}(t)}}{\partial{s\_{j}(t-1)}}}
-= \sum\_{k=1}^{H}{E\_{hk}(t)\*r\_{kj}(t)} = E\_h(t)^{\mathrm{T}} \* R\_j
+\frac{\partial{L(t)}}{\partial{s\_{j}(t-1)}} = \sum\_{k=1}\^{H}{\frac{\partial{L(t)}}{\partial{b\_{k}(t)}} \* \frac{\partial{b\_{k}(t)}}{\partial{s\_{j}(t-1)}}}
+= \sum\_{k=1}\^{H}{E\_{hk}(t)\*r\_{kj}(t)} = E\_h(t)\^{\mathrm{T}} \* R\_j
 \end{equation}
 
 ~~~very similar to equation $\eqref{22}$, $R\_j$ means the $j$-th column of matrix $R$. 
@@ -292,37 +292,37 @@ According to $\eqref{23}$, we all already know $\frac{\partial{L(t)}}{\partial{b
 }{
 \partial{b\_{j}(t-1)}
 }
-= E\_h(t)^{\mathrm{T}} \* R\_j \* s\_{j}(t-1) \* (1-s\_{j}(t-1) ) 
+= E\_h(t)\^{\mathrm{T}} \* R\_j \* s\_{j}(t-1) \* (1-s\_{j}(t-1) ) 
 \end{equation}
 
 Using the function defined in $\eqref{26}$, we found
 \begin{equation}
- E\_h(t)^{\mathrm{T}} \* R\_j \* s\_{j}(t-1) \* (1-s\_{j}(t-1) ) = d\_{hj}(E\_h(t)^{\mathrm{T}}\*R, t-1)
+ E\_h(t)\^{\mathrm{T}} \* R\_j \* s\_{j}(t-1) \* (1-s\_{j}(t-1) ) = d\_{hj}(E\_h(t)\^{\mathrm{T}}\*R, t-1)
 \end{equation}
 
 Therefore, 
 \begin{equation}
- \frac{\partial{L(t)}}{\partial{b\_{j}(t-1)}} = d\_{hj}(E\_h(t)^{\mathrm{T}}\*R, t-1)
+ \frac{\partial{L(t)}}{\partial{b\_{j}(t-1)}} = d\_{hj}(E\_h(t)\^{\mathrm{T}}\*R, t-1)
 \end{equation}
 
-For convenience, we define $E\_{hj}(t-1)=d\_{h,j}(E\_{h}(t)^\mathrm{T}R,t-1)$, and sequencely we know the vector $E\_{h}(t-1) = d\_{hj}(E\_{h}(t)^\mathrm{T}R,t-1)$.  
+For convenience, we define $E\_{hj}(t-1)=d\_{h,j}(E\_{h}(t)\^\mathrm{T}R,t-1)$, and sequencely we know the vector $E\_{h}(t-1) = d\_{hj}(E\_{h}(t)\^\mathrm{T}R,t-1)$.  
 
 Then, 
 \begin{equation}
  \frac{\partial{L(t)}}{\partial{u\_{ji}(t-1)}} = \frac{\partial{L(t)}}{\partial{b\_{j}(t-1)}} \* \frac{\partial{b\_{j}(t-1)}}{\partial{u\_{ji}(t-1)}} 
- = d\_{hj}(E\_h(t-1)^{\mathrm{T}}\*R, t-1) \* x\_{i}(t-1)
+ = d\_{hj}(E\_h(t-1)\^{\mathrm{T}}\*R, t-1) \* x\_{i}(t-1)
 \end{equation}
 
 Similar to equation $\eqref{27}$, we can get the target updating rule,
 
 \begin{equation}
-U(t+1) = U(t) + \alpha \* E\_{h}(t-1) \* x(t-1)^\mathrm{T} - \beta \* U(t)
+U(t+1) = U(t) + \alpha \* E\_{h}(t-1) \* x(t-1)\^\mathrm{T} - \beta \* U(t)
 \label{35}
 \end{equation}
 
 Simultaneously, 
 \begin{equation}
-R(t+1) = R(t) + \alpha \* E\_{h}(t-1) \* s(t-2)^\mathrm{T} - \beta \* R(t)
+R(t+1) = R(t) + \alpha \* E\_{h}(t-1) \* s(t-2)\^\mathrm{T} - \beta \* R(t)
 \label{36}
 \end{equation}
 
@@ -332,8 +332,8 @@ Comparing these updating rules equation $\eqref{27}$ and equation $\eqref{35}$, 
 The calculation procedure has nothing special, except the value of some variables is different. 
 Similarly, at time $t-2$, considering the cost function is $L(t)$, we can get these updating rules, 
 \begin{equation}
- U(t+1) = U(t) + \alpha \* E\_{h}(t-2) \* x(t-2)^\mathrm{T} - \beta \* U(t) \\\
- R(t+1) = R(t) + \alpha \* E\_{h}(t-2) \* s(t-3)^\mathrm{T} - \beta \* R(t) 
+ U(t+1) = U(t) + \alpha \* E\_{h}(t-2) \* x(t-2)\^\mathrm{T} - \beta \* U(t) \\\
+ R(t+1) = R(t) + \alpha \* E\_{h}(t-2) \* s(t-3)\^\mathrm{T} - \beta \* R(t) 
 \end{equation}
 
 But what is $E\_{h}(t-2)$?   
@@ -352,7 +352,7 @@ For $E\_{h}(t-2)$ and later vector such as $E\_{h}(t-3)$, this martrix always is
 Therefore we can get the form of $E\_{h}(t-2)$,
 
 \begin{equation}
-	E\_{h}(t-2) = d\_{h}(E\_{h}(t-1)^{\mathrm{T}}R,t-2)
+	E\_{h}(t-2) = d\_{h}(E\_{h}(t-1)\^{\mathrm{T}}R,t-2)
 \end{equation}
 
 
@@ -373,8 +373,8 @@ And we want to make sure the value of $M\_1$ and $M\_2$ are always the same in e
 A simple technique here is to put $\frac{\partial{L}}{\partial{M\_1}}$ and $\frac{\partial{L}}{\partial{M\_2}}$ together. And use the sum result of average result 
 to modify $M\_1$ and $M\_2$ by the same amount. 
 \begin{equation}
-M\_1^{new} =M\_1^{old} + \alpha \* (\frac{\partial{L}}{\partial{M\_1}}+\frac{\partial{L}}{\partial{M\_2}}) \\\
-M\_2^{new} =M\_2^{old} + \alpha \* (\frac{\partial{L}}{\partial{M\_1}}+\frac{\partial{L}}{\partial{M\_2}})
+M\_1\^{new} =M\_1\^{old} + \alpha \* (\frac{\partial{L}}{\partial{M\_1}}+\frac{\partial{L}}{\partial{M\_2}}) \\\
+M\_2\^{new} =M\_2\^{old} + \alpha \* (\frac{\partial{L}}{\partial{M\_1}}+\frac{\partial{L}}{\partial{M\_2}})
 \end{equation}
 Since their initial values are the same and their derivatives are the same, their values will always be the same. And this weight updating mechanism considers derivative contributions from both side. 
 
@@ -382,9 +382,9 @@ We use this mechanism to update weights of $U$ and $R$.
 
 Now, we can get final updating rules of $W$, $U$ and $R$, 
 \begin{equation}
- W(t+1) = W(t) + \alpha \* E\_{o}(t) \* s(t)^\mathrm{T} - \beta \* W(t) \\\
- U(t+1) = U(t) + \alpha \* \sum\_{m=0}^{M}{E\_{h}(t-m) \* x(t-m)^\mathrm{T}} - \beta \* U(t) \\\
- R(t+1) = R(t) + \alpha \* \sum\_{m=0}^{M}{E\_{h}(t-m) \* s(t-m-1)^\mathrm{T}} - \beta \* R(t) 
+ W(t+1) = W(t) + \alpha \* E\_{o}(t) \* s(t)\^\mathrm{T} - \beta \* W(t) \\\
+ U(t+1) = U(t) + \alpha \* \sum\_{m=0}\^{M}{E\_{h}(t-m) \* x(t-m)\^\mathrm{T}} - \beta \* U(t) \\\
+ R(t+1) = R(t) + \alpha \* \sum\_{m=0}\^{M}{E\_{h}(t-m) \* s(t-m-1)\^\mathrm{T}} - \beta \* R(t) 
 \end{equation}
 
 where $M$ is number of steps for unfolding. 
