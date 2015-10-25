@@ -1,4 +1,4 @@
-name: "snnlpnet"
+name: "opensmt"
 markdown: redcarpet
 highlighter: pygments
 permalink: :title

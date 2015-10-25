@@ -1,6 +1,6 @@
 ---
 layout: default
-title: snnlpnet
+title: opensmt
 ---
 
 <div id="home">
