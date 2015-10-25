@@ -1,5 +1,6 @@
 # opensmt 
-This is a personal website [http://www.opensmt.com][opensmt]].  ## Themes by
+This is a personal website [http://www.opensmt.com][opensmt].  
+## Themes by
 * [Gereksiz][github] on GitHub
 * [Bugs of Berk][bob], theme creator's website
 
